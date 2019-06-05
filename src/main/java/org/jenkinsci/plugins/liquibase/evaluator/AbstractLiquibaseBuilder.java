@@ -163,6 +163,9 @@ public abstract class AbstractLiquibaseBuilder extends Builder implements Simple
             }
             JdbcConnection jdbcConnection = createJdbcConnection(configProperties, driverName);
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcConnection);
+            if (database.getDefaultSchemaName() == null) {
+            	database.setDefaultSchemaName(getProperty(configProperties, LiquibaseProperty.DEFAULT_SCHEMA_NAME));
+            }
             ResourceAccessor resourceAccessor = createResourceAccessor(workspace, environment, resolveMacros);
 
             String changeLogFile = getProperty(configProperties, LiquibaseProperty.CHANGELOG_FILE);
